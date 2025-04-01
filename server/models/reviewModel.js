@@ -6,7 +6,7 @@ const reviewSchema = new mongoose.Schema(
   {
     review: {
       type: String,
-      required: [true, "Review can not be empty!"],
+      required: [true, "評論不能為空"],
     },
     rating: {
       type: Number,
@@ -20,12 +20,12 @@ const reviewSchema = new mongoose.Schema(
     tour: {
       type: mongoose.Schema.ObjectId,
       ref: "Tour",
-      required: [true, "Review must belong to a tour."],
+      required: [true, "評論必須選擇一個旅遊行程"],
     },
     user: {
       type: mongoose.Schema.ObjectId,
       ref: "User",
-      required: [true, "Review must belong to a user"],
+      required: [true, "僅有遊客可以評論"],
     },
   },
   {

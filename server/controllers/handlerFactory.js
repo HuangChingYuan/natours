@@ -4,7 +4,7 @@ const APIFeatures = require("./../utils/apiFeatures");
 
 exports.getAll = (Model) =>
   catchAsync(async (req, res, next) => {
-    // To allow for nested GET reviews on tour (hack)
+    // 允許在旅遊行程中 GET 評論
     let filter = {};
     if (req.params.tourId) filter = { tour: req.params.tourId };
 
@@ -16,7 +16,7 @@ exports.getAll = (Model) =>
     // const doc = await features.query.explain();
     const doc = await features.query;
 
-    // SEND RESPONSE
+    // 發送回覆
     res.status(200).json({
       status: "success",
       results: doc.length,

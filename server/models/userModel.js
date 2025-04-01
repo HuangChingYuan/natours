@@ -6,14 +6,14 @@ const bcrypt = require("bcryptjs");
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "Please tell us your name!"],
+    required: [true, "請告訴我們你的名字"],
   },
   email: {
     type: String,
-    required: [true, "Please provide your email"],
+    required: [true, "請提供您的電子郵件"],
     unique: true,
     lowercase: true,
-    validate: [validator.isEmail, "Please provide a valid email"],
+    validate: [validator.isEmail, "請提供有效的電子郵件"],
   },
   photo: String,
   role: {
@@ -23,19 +23,19 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, "Please provide a password"],
+    required: [true, "請提供密碼"],
     minlength: 8,
     select: false,
   },
   passwordConfirm: {
     type: String,
-    required: [true, "Please confirm your password"],
+    required: [true, "請確認您的密碼"],
     validate: {
-      // This only works on CREATE and SAVE!!!
+      // 這只適用於 CREATE 和 SAVE!!!
       validator: function (el) {
         return el === this.password;
       },
-      message: "Passwords are not the same!",
+      message: "密碼不一樣",
     },
   },
   passwordChangedAt: Date,
@@ -49,13 +49,13 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.pre("save", async function (next) {
-  // Only run this function if password was actually modified
+  // 僅當密碼確實被修改時才運行此函數
   if (!this.isModified("password")) return next();
 
-  // Hash the password with cost of 12
+  // 對密碼進行雜湊處理
   this.password = await bcrypt.hash(this.password, 12);
 
-  // Delete passwordConfirm field
+  // 刪除密碼確認字段
   this.passwordConfirm = undefined;
   next();
 });
@@ -68,7 +68,7 @@ userSchema.pre("save", function (next) {
 });
 
 userSchema.pre(/^find/, function (next) {
-  // this points to the current query
+  // this 指向目前查詢
   this.find({ active: { $ne: false } });
   next();
 });
@@ -90,7 +90,7 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
     return JWTTimestamp < changedTimestamp;
   }
 
-  // False means NOT changed
+  // False 表示未更改
   return false;
 };
 
