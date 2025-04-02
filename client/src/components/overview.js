@@ -12,7 +12,7 @@ const Overview = () => {
         setTours(data.data);
       })
       .catch((error) => {
-        console.error("Error fetching tours:", error);
+        console.error("獲取旅遊行程時出錯:", error);
       });
   }, []);
   return (

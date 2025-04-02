@@ -50,7 +50,7 @@ const tourSchema = new mongoose.Schema(
       type: Number,
       validate: {
         validator: function (val) {
-          // 這僅指向新文檔建立的當前文檔
+          // this僅指向新文檔建立的當前文檔
           return val < this.price;
         },
         message: "折扣價 ({VALUE}) 應低於正常價格",

@@ -1,5 +1,5 @@
 const catchAsync = require("./../utils/catchAsync");
-// const AppError = require("./../utils/appError");
+const AppError = require("./../utils/appError");
 const APIFeatures = require("./../utils/apiFeatures");
 
 exports.getAll = (Model) =>
@@ -20,6 +20,24 @@ exports.getAll = (Model) =>
     res.status(200).json({
       status: "success",
       results: doc.length,
+      data: {
+        data: doc,
+      },
+    });
+  });
+
+exports.getOne = (Model, popOptions) =>
+  catchAsync(async (req, res, next) => {
+    let query = Model.findById(req.params.id);
+    if (popOptions) query = query.populate(popOptions);
+    const doc = await query;
+
+    if (!doc) {
+      return next(new AppError("未找到 所請求的 URL", 404));
+    }
+
+    res.status(200).json({
+      status: "success",
       data: {
         data: doc,
       },

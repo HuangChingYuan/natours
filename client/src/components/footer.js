@@ -20,7 +20,7 @@ const footer = () => {
           <Link to="#">Careers</Link>
         </li>
         <li>
-          <aLink to="#">Contact</aLink>
+          <Link to="#">Contact</Link>
         </li>
       </ul>
       <p className="footer__copyright">Author</p>

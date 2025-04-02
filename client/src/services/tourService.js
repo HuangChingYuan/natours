@@ -7,6 +7,12 @@ class TourService {
       return response.data.data;
     });
   }
+
+  getTour(slug) {
+    return axios.get(API_URL + "/tour/" + slug).then((response) => {
+      return response.data.data;
+    });
+  }
 }
 
 const tourService = new TourService();

@@ -4,7 +4,7 @@ const header = () => {
   return (
     <header className="header">
       <nav className="nav nav--tours">
-        <Link to="#" className="nav__el">
+        <Link to="/" className="nav__el">
           All tours
         </Link>
         <form className="nav__search">
