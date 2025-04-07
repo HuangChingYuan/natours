@@ -43,13 +43,13 @@ const Overview = () => {
                 <p className="card__text">{tour.summary}</p>
                 <div className="card__data">
                   <svg className="card__icon">
-                    <use href="img/icons.svg#icon-map-pin"></use>
+                    <use xlinkHref="img/icons.svg#icon-map-pin"></use>
                   </svg>
                   <span>{tour.startLocation.description}</span>
                 </div>
                 <div className="card__data">
                   <svg className="card__icon">
-                    <use href="img/icons.svg#icon-calendar"></use>
+                    <use xlinkHref="img/icons.svg#icon-calendar"></use>
                   </svg>
                   <span>
                     {tour.startDates[0].toLocaleString("en-us", {
@@ -60,13 +60,13 @@ const Overview = () => {
                 </div>
                 <div className="card__data">
                   <svg className="card__icon">
-                    <use href="img/icons.svg#icon-flag"></use>
+                    <use xlinkHref="img/icons.svg#icon-flag"></use>
                   </svg>
                   <span>{tour.locations.length} stops</span>
                 </div>
                 <div className="card__data">
                   <svg className="card__icon">
-                    <use href="img/icons.svg#icon-user"></use>
+                    <use xlinkHref="img/icons.svg#icon-user"></use>
                   </svg>
                   <span>{tour.maxGroupSize} people</span>
                 </div>
@@ -95,7 +95,9 @@ const Overview = () => {
             </div>
           ))
         ) : (
-          <p>載入中...</p>
+          <div className="spinner-container">
+            <div className="spinner"></div>
+          </div>
         )}
       </div>
     </main>

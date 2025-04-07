@@ -10,7 +10,7 @@ const header = () => {
         <form className="nav__search">
           <button className="nav__search-btn">
             <svg>
-              <use href="img/icons.svg#icon-search"></use>
+              <use xlinkHref="img/icons.svg#icon-search"></use>
             </svg>
           </button>
           <input
