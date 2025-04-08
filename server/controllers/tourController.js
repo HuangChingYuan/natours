@@ -24,3 +24,7 @@ exports.getTourByslug = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+exports.createTour = factory.createOne(Tour);
+exports.updateTour = factory.updateOne(Tour);
+exports.deleteTour = factory.deleteOne(Tour);

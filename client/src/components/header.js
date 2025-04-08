@@ -36,7 +36,9 @@ const header = () => {
           <span>default</span>
         </Link>
 
-        <button className="nav__el">Log in</button>
+        <Link to="/login" className="nav__el">
+          Log in
+        </Link>
         <button className="nav__el nav__el--cta">Sign up</button>
       </nav>
     </header>

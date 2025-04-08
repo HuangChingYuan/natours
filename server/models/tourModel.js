@@ -53,7 +53,7 @@ const tourSchema = new mongoose.Schema(
           // this僅指向新文檔建立的當前文檔
           return val < this.price;
         },
-        message: "折扣價 ({VALUE}) 應低於正常價格",
+        message: "折扣價應低於正常價格",
       },
     },
     summary: {
@@ -157,12 +157,12 @@ tourSchema.pre("save", function (next) {
 
 // 查詢中介軟體
 // tourSchema.pre('find', function(next) {
-tourSchema.pre(/^find/, function (next) {
-  this.find({ secretTour: { $ne: true } });
+// tourSchema.pre(/^find/, function (next) {
+//   this.find({ secretTour: { $ne: true } });
 
-  this.start = Date.now();
-  next();
-});
+//   this.start = Date.now();
+//   next();
+// });
 
 tourSchema.pre(/^find/, function (next) {
   this.populate({
@@ -173,10 +173,10 @@ tourSchema.pre(/^find/, function (next) {
   next();
 });
 
-tourSchema.post(/^find/, function (docs, next) {
-  console.log(`查詢花了 ${Date.now() - this.start} 毫秒!`);
-  next();
-});
+// tourSchema.post(/^find/, function (docs, next) {
+//   console.log(`查詢花了 ${Date.now() - this.start} 毫秒!`);
+//   next();
+// });
 
 // 聚合中介軟體
 // tourSchema.pre('aggregate', function(next) {
