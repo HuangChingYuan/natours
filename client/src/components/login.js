@@ -1,36 +1,85 @@
+import { useState, useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
+import authService from "../services/authService";
+import { showAlert } from "../utils/alerts";
+
 const Login = () => {
+  // const nagivate = useNavigate();
+
+  let [email, setEmail] = useState("");
+  let [password, setPassword] = useState("");
+  let [user, setUser] = useState(null);
+
+  useEffect(() => {
+    if (user) {
+      console.log("User updated:", user);
+    }
+  }, [user]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+  };
+  const handlePassword = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleLogin = async () => {
+    try {
+      let response = await authService.login(email, password);
+      if (response.data.status === "success") {
+        setUser(response.data.data.user);
+        showAlert("success", "登入成功");
+        // window.setTimeout(() => {
+        //   window.location.assign("/");
+        // }, 1500);
+        // nagivate("/");
+      }
+    } catch (err) {
+      showAlert("error", err.response.data);
+      console.log(err.response);
+    }
+  };
+
   return (
-    <main class="main">
-      <div class="login-form">
-        <h2 class="heading-secondary ma-bt-lg">Log into your account</h2>
-        <form class="form form--login">
-          <div class="form__group">
-            <label class="form__label" for="email">
+    <main className="main">
+      <div className="login-form">
+        <h2 className="heading-secondary ma-bt-lg">Log into your account</h2>
+        <form className="form form--login" onSubmit={handleSubmit}>
+          <div className="form__group">
+            <label className="form__label" htmlFor="email">
               Email address
             </label>
             <input
-              class="form__input"
+              onChange={handleEmail}
+              className="form__input"
               id="email"
               type="email"
               placeholder="you@example.com"
               required=""
             />
           </div>
-          <div class="form__group ma-bt-md">
-            <label class="form__label" for="password">
+          <div className="form__group ma-bt-md">
+            <label className="form__label" htmlFor="password">
               Password
             </label>
             <input
-              class="form__input"
+              onChange={handlePassword}
+              className="form__input"
               id="password"
               type="password"
               placeholder="••••••••"
               required=""
-              minlength="8"
+              minLength="8"
             />
           </div>
-          <div class="form__group">
-            <button class="btn btn--green">Login</button>
+          <div className="form__group">
+            <button onClick={handleLogin} className="btn btn--green">
+              Login
+            </button>
           </div>
         </form>
       </div>
