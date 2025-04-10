@@ -1,20 +1,13 @@
-import { useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import authService from "../services/authService";
 import { showAlert } from "../utils/alerts";
 
-const Login = () => {
-  // const nagivate = useNavigate();
+const Login = ({ user, setUser }) => {
+  const nagivate = useNavigate();
 
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
-  let [user, setUser] = useState(null);
-
-  useEffect(() => {
-    if (user) {
-      console.log("User updated:", user);
-    }
-  }, [user]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -33,14 +26,12 @@ const Login = () => {
       if (response.data.status === "success") {
         setUser(response.data.data.user);
         showAlert("success", "登入成功");
-        // window.setTimeout(() => {
-        //   window.location.assign("/");
-        // }, 1500);
-        // nagivate("/");
+        window.setTimeout(() => {
+          nagivate("/");
+        }, 1500);
       }
     } catch (err) {
-      showAlert("error", err.response.data);
-      console.log(err.response);
+      showAlert("error", err.response.data.message);
     }
   };
 

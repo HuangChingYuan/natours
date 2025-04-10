@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import tourService from "../services/tourService";
 
 const Tour = () => {
-  const { slug } = useParams(); // 取得 URL 參數
+  const { slug } = useParams();
   const [tour, setTour] = useState(null);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const Tour = () => {
 
   const reviewCard = (review) => {
     return (
-      <div className="reviews__card">
+      <div className="reviews__card" key={review._id}>
         <div className="reviews__avatar">
           <img
             src={`/img/users/${review.user.photo}`}

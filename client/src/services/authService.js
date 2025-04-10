@@ -15,6 +15,14 @@ class AuthService {
       return response;
     });
   }
+  logout() {
+    return axios({
+      method: "GET",
+      url: API_URL + "/logout",
+    }).then((response) => {
+      return response;
+    });
+  }
 }
 
 const authService = new AuthService();

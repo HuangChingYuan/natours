@@ -4,8 +4,11 @@ const authController = require("./../controllers/authController");
 
 const router = express.Router();
 
+// router.use(authController.isLoggedIn);
+
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
+router.get("/logout", authController.logout);
 
 // 保護在這中介軟體之後的所有路徑
 router.use(authController.protect);
