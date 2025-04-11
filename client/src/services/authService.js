@@ -15,10 +15,25 @@ class AuthService {
       return response;
     });
   }
+
   logout() {
     return axios({
       method: "GET",
       url: API_URL + "/logout",
+    }).then((response) => {
+      return response;
+    });
+  }
+
+  updateSettings(name, email) {
+    return axios({
+      method: "PATCH",
+      url: API_URL + "/updateMe",
+      data: {
+        name,
+        email,
+      },
+      withCredentials: true,
     }).then((response) => {
       return response;
     });

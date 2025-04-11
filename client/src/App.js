@@ -4,6 +4,7 @@ import Layout from "./components/Layout";
 import Overview from "./components/overview";
 import Tour from "./components/tour";
 import Login from "./components/login";
+import Account from "./components/account";
 
 function App() {
   let [user, setUser] = useState(null);
@@ -16,6 +17,10 @@ function App() {
           <Route
             path="/login"
             element={<Login user={user} setUser={setUser} />}
+          />
+          <Route
+            path="/me"
+            element={<Account user={user} setUser={setUser} />}
           />
         </Route>
       </Routes>
