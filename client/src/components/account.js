@@ -6,6 +6,9 @@ import { showAlert } from "../utils/alerts";
 const Account = ({ user, setUser }) => {
   let [name, setName] = useState("");
   let [email, setEmail] = useState("");
+  let [passwordCurrent, setPasswordCurrent] = useState("");
+  let [password, setPassword] = useState("");
+  let [passwordConfirm, setPasswordConfirm] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -18,12 +21,48 @@ const Account = ({ user, setUser }) => {
     setEmail(e.target.value);
   };
 
+  const handlePasswordCurrent = (e) => {
+    setPasswordCurrent(e.target.value);
+  };
+  const handlePassword = (e) => {
+    setPassword(e.target.value);
+  };
+  const handlePasswordConfirm = (e) => {
+    setPasswordConfirm(e.target.value);
+  };
+
   const handleUpdateSettings = async () => {
     try {
-      let response = await authService.updateSettings(name, email);
+      const updatedUser = {
+        ...user,
+        name,
+        email,
+      };
+      let response = await authService.updateSettings(updatedUser);
       if (response.data.status === "success") {
         setUser(response.data.data.user);
-        showAlert("success", "更新成功");
+        showAlert("success", "資料更新成功");
+        // window.setTimeout(() => {
+        //   nagivate("/");
+        // }, 1500);
+      }
+    } catch (err) {
+      showAlert("error", err.response.data.message);
+    }
+  };
+
+  const handleupdateMyPassword = async () => {
+    try {
+      const updatedMyPassword = {
+        ...user,
+        passwordCurrent,
+        password,
+        passwordConfirm,
+      };
+      let response = await authService.updateMyPassword(updatedMyPassword);
+      if (response.data.status === "success") {
+        setUser(response.data.data.user);
+        showAlert("success", "密碼更新成功");
         // window.setTimeout(() => {
         //   nagivate("/");
         // }, 1500);
@@ -72,7 +111,7 @@ const Account = ({ user, setUser }) => {
           <h2 className="heading-secondary ma-bt-md">Your account settings</h2>
           <form className="form form-user-data" onSubmit={handleSubmit}>
             <div className="form__group">
-              <label className="form__label" for="name">
+              <label className="form__label" htmlFor="name">
                 Name
               </label>
               <input
@@ -87,7 +126,7 @@ const Account = ({ user, setUser }) => {
               />
             </div>
             <div className="form__group ma-bt-md">
-              <label className="form__label" for="email">
+              <label className="form__label" htmlFor="email">
                 Email address
               </label>
               <input
@@ -114,7 +153,7 @@ const Account = ({ user, setUser }) => {
                 id="photo"
                 name="photo"
               />
-              <label for="photo">Choose new photo</label>
+              <label htmlFor="photo">Choose new photo</label>
             </div>
             <div className="form__group right">
               <button
@@ -131,46 +170,52 @@ const Account = ({ user, setUser }) => {
           <h2 className="heading-secondary ma-bt-md">Password change</h2>
           <form className="form form-user-password" onSubmit={handleSubmit}>
             <div className="form__group">
-              <label className="form__label" for="password-current">
+              <label className="form__label" htmlFor="password-current">
                 Current password
               </label>
               <input
+                onChange={handlePasswordCurrent}
                 className="form__input"
                 id="password-current"
                 type="password"
                 placeholder="••••••••"
                 required=""
-                minlength="8"
+                minLength="8"
               />
             </div>
             <div className="form__group">
-              <label className="form__label" for="password">
+              <label className="form__label" htmlFor="password">
                 New password
               </label>
               <input
+                onChange={handlePassword}
                 className="form__input"
                 id="password"
                 type="password"
                 placeholder="••••••••"
                 required=""
-                minlength="8"
+                minLength="8"
               />
             </div>
             <div className="form__group ma-bt-lg">
-              <label className="form__label" for="password-confirm">
+              <label className="form__label" htmlFor="password-confirm">
                 Confirm password
               </label>
               <input
+                onChange={handlePasswordConfirm}
                 className="form__input"
                 id="password-confirm"
                 type="password"
                 placeholder="••••••••"
                 required=""
-                minlength="8"
+                minLength="8"
               />
             </div>
             <div className="form__group right">
-              <button className="btn btn--small btn--green btn--save-password">
+              <button
+                onClick={handleupdateMyPassword}
+                className="btn btn--small btn--green btn--save-password"
+              >
                 Save password
               </button>
             </div>

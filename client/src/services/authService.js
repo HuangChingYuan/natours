@@ -20,19 +20,28 @@ class AuthService {
     return axios({
       method: "GET",
       url: API_URL + "/logout",
+      withCredentials: true,
     }).then((response) => {
       return response;
     });
   }
 
-  updateSettings(name, email) {
+  updateSettings(data) {
     return axios({
       method: "PATCH",
       url: API_URL + "/updateMe",
-      data: {
-        name,
-        email,
-      },
+      data,
+      withCredentials: true,
+    }).then((response) => {
+      return response;
+    });
+  }
+
+  updateMyPassword(data) {
+    return axios({
+      method: "PATCH",
+      url: API_URL + "/updateMyPassword",
+      data,
       withCredentials: true,
     }).then((response) => {
       return response;

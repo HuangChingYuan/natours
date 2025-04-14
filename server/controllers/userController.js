@@ -3,8 +3,13 @@ const catchAsync = require("./../utils/catchAsync");
 const AppError = require("./../utils/appError");
 const factory = require("./handlerFactory");
 
-exports.getUser = factory.getOne(User);
-exports.getAllUsers = factory.getAll(User);
+const filterObj = (obj, ...allowedFields) => {
+  const newObj = {};
+  Object.keys(obj).forEach((el) => {
+    if (allowedFields.includes(el)) newObj[el] = obj[el];
+  });
+  return newObj;
+};
 
 exports.getMe = (req, res, next) => {
   req.params.id = req.user.id;
@@ -49,6 +54,9 @@ exports.createUser = (req, res) => {
     message: "請使用新的註冊頁面",
   });
 };
+
+exports.getUser = factory.getOne(User);
+exports.getAllUsers = factory.getAll(User);
 
 exports.updateUser = factory.updateOne(User); // 請勿用此更新密碼
 exports.deleteUser = factory.deleteOne(User);

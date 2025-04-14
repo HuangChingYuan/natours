@@ -1,9 +1,13 @@
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 const tourRouter = require("./routes/tourRoutes");
 const userRouter = require("./routes/userRoutes");
 const reviewRouter = require("./routes/reviewRoutes");
+
+const AppError = require("./utils/appError");
+const globalErrorHandler = require("./controllers/errorController");
 
 const app = express();
 
@@ -14,9 +18,7 @@ app.use(
     credentials: true,
   })
 );
-
-const AppError = require("./utils/appError");
-const globalErrorHandler = require("./controllers/errorController");
+app.use(cookieParser());
 
 app.use("/api/v1/tours", tourRouter);
 app.use("/api/v1/users", userRouter);
