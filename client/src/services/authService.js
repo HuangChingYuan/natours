@@ -47,6 +47,22 @@ class AuthService {
       return response;
     });
   }
+
+  signup(name, email, password, passwordConfirm) {
+    return axios({
+      method: "POST",
+      url: API_URL + "/signup",
+      data: {
+        name,
+        email,
+        password,
+        passwordConfirm,
+      },
+      withCredentials: true,
+    }).then((response) => {
+      return response;
+    });
+  }
 }
 
 const authService = new AuthService();

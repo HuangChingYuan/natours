@@ -1,21 +1,25 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import authService from "../services/authService";
 import { showAlert } from "../utils/alerts";
 
 const Header = ({ user, setUser }) => {
+  const nagivate = useNavigate();
+
   const handleLogout = async () => {
     try {
       let response = await authService.logout();
       if (response.data.status === "success") {
         showAlert("success", "登出成功");
-        setUser(null);
-        window.setTimeout(() => {
-          window.location.reload();
-        }, 1500);
+        nagivate("/");
+        setUser(response.data.user);
+        // window.setTimeout(() => {
+        //   nagivate("/");
+        //   setUser(null);
+        // }, 1500);
       }
     } catch (err) {
       console.log(err);
-      showAlert("error", err.response.data);
+      showAlert("error", err);
     }
   };
   return (
@@ -42,7 +46,7 @@ const Header = ({ user, setUser }) => {
       </div>
 
       <nav className="nav nav--user">
-        {user ? (
+        {user && user.photo && user.name && (
           <>
             <button onClick={handleLogout} className="nav__el nav__el--logout">
               Log out
@@ -56,12 +60,15 @@ const Header = ({ user, setUser }) => {
               <span>{user.name.split(" ")[0]}</span>
             </Link>
           </>
-        ) : (
+        )}
+        {(!user || !user.photo || !user.name) && (
           <>
             <Link to="/login" className="nav__el">
               Log in
             </Link>
-            <button className="nav__el nav__el--cta">Sign up</button>
+            <Link to="/signup" className="nav__el">
+              <button className="nav__el nav__el--cta">Sign up</button>
+            </Link>
           </>
         )}
       </nav>

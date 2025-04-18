@@ -119,8 +119,7 @@ const Account = ({ user, setUser }) => {
                 className="form__input"
                 id="name"
                 type="text"
-                // value={user.name}
-                placeholder={user.name}
+                defaultValue={user.name}
                 required=""
                 name="name"
               />
@@ -134,8 +133,7 @@ const Account = ({ user, setUser }) => {
                 className="form__input"
                 id="email"
                 type="email"
-                // value={user.email}
-                placeholder={user.email}
+                defaultValue={user.email}
                 required=""
                 name="email"
               />
