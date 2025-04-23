@@ -1,24 +1,17 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import authService from "../services/authService";
 import { showAlert } from "../utils/alerts";
 
 const Account = ({ user, setUser }) => {
-  let [name, setName] = useState("");
-  let [email, setEmail] = useState("");
   let [passwordCurrent, setPasswordCurrent] = useState("");
   let [password, setPassword] = useState("");
   let [passwordConfirm, setPasswordConfirm] = useState("");
+  const inputName = useRef();
+  const inputEmail = useRef();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  };
-
-  const handleName = (e) => {
-    setName(e.target.value);
-  };
-  const handleEmail = (e) => {
-    setEmail(e.target.value);
   };
 
   const handlePasswordCurrent = (e) => {
@@ -32,19 +25,18 @@ const Account = ({ user, setUser }) => {
   };
 
   const handleUpdateSettings = async () => {
+    const userName = inputName.current.value;
+    const userEmail = inputEmail.current.value;
     try {
       const updatedUser = {
         ...user,
-        name,
-        email,
+        name: userName,
+        email: userEmail,
       };
       let response = await authService.updateSettings(updatedUser);
       if (response.data.status === "success") {
         setUser(response.data.data.user);
         showAlert("success", "資料更新成功");
-        // window.setTimeout(() => {
-        //   nagivate("/");
-        // }, 1500);
       }
     } catch (err) {
       showAlert("error", err.response.data.message);
@@ -63,9 +55,6 @@ const Account = ({ user, setUser }) => {
       if (response.data.status === "success") {
         setUser(response.data.data.user);
         showAlert("success", "密碼更新成功");
-        // window.setTimeout(() => {
-        //   nagivate("/");
-        // }, 1500);
       }
     } catch (err) {
       showAlert("error", err.response.data.message);
@@ -115,7 +104,7 @@ const Account = ({ user, setUser }) => {
                 Name
               </label>
               <input
-                onChange={handleName}
+                ref={inputName}
                 className="form__input"
                 id="name"
                 type="text"
@@ -129,7 +118,7 @@ const Account = ({ user, setUser }) => {
                 Email address
               </label>
               <input
-                onChange={handleEmail}
+                ref={inputEmail}
                 className="form__input"
                 id="email"
                 type="email"

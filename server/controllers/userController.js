@@ -25,7 +25,23 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   // 2) 篩選掉不允許更新和不需要的欄位
   const filteredBody = filterObj(req.body, "name", "email");
 
-  // 3) 更改個人資料
+  // 3) 取得目前的使用者資料
+  const currentUser = await User.findById(req.user.id);
+
+  // 4) 檢查 name, email 是否與原資料相同
+  let isSame = true;
+  for (const key in filteredBody) {
+    if (filteredBody[key] !== currentUser[key]) {
+      isSame = false;
+      break;
+    }
+  }
+
+  if (isSame) {
+    return next(new AppError("請提供需要更新的姓名或Email", 400));
+  }
+
+  // 5) 更改個人資料
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
     runValidators: true,
