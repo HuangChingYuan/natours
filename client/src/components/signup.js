@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import authService from "../services/authService";
+import { useAuth } from "../contexts/AuthContext";
 import { showAlert } from "../utils/alerts";
 
-const Signup = ({ user, setUser }) => {
+const Signup = () => {
   const nagivate = useNavigate();
+  const { setUser } = useAuth();
 
   let [name, setName] = useState("");
   let [email, setEmail] = useState("");

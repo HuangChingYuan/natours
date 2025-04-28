@@ -1,21 +1,19 @@
 import { Link, useNavigate } from "react-router-dom";
 import authService from "../services/authService";
+import { useAuth } from "../contexts/AuthContext";
 import { showAlert } from "../utils/alerts";
 
-const Header = ({ user, setUser }) => {
+const Header = () => {
   const nagivate = useNavigate();
+  const { user, setUser } = useAuth();
 
   const handleLogout = async () => {
     try {
+      nagivate("/");
       let response = await authService.logout();
       if (response.data.status === "success") {
         showAlert("success", "登出成功");
-        nagivate("/");
-        setUser(response.data.user);
-        // window.setTimeout(() => {
-        //   nagivate("/");
-        //   setUser(null);
-        // }, 1500);
+        setUser(response.data.data.user);
       }
     } catch (err) {
       console.log(err);

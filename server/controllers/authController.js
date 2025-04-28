@@ -64,11 +64,13 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 exports.logout = (req, res) => {
-  res.cookie("jwt", "", {
-    expires: new Date(Date.now()),
-    httpOnly: true,
+  res.clearCookie("jwt");
+  res.status(200).json({
+    status: "success",
+    data: {
+      user: null,
+    },
   });
-  res.status(200).json({ status: "success" });
 };
 
 exports.protect = catchAsync(async (req, res, next) => {
@@ -102,7 +104,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   next();
 });
 
-// 僅適用於檢查 不會返回錯誤
+// 僅用於檢查登入狀態 不會返回錯誤(會傳遞不可預期的錯誤)
 exports.isLoggedIn = async (req, res, next) => {
   if (req.cookies.jwt) {
     try {
@@ -115,22 +117,42 @@ exports.isLoggedIn = async (req, res, next) => {
       // 2) 檢查使用者帳號是否仍然存在
       const currentUser = await User.findById(decoded.id);
       if (!currentUser) {
-        return next();
+        return res.status(401).json({
+          status: "error",
+          data: {
+            user: null,
+          },
+        });
       }
 
       // 3) 檢查使用者在發出令牌後是否有更改密碼
       if (currentUser.changedPasswordAfter(decoded.iat)) {
-        return next();
+        return res.status(200).json({
+          status: "success",
+          data: {
+            user: currentUser,
+          },
+        });
       }
 
       // 登入的使用者資訊
-      res.locals.user = currentUser;
-      return next();
+      return res.status(200).json({
+        status: "success",
+        data: {
+          user: currentUser,
+        },
+      });
     } catch (err) {
-      return next();
+      console.log(err);
+      return next(err);
     }
   }
-  next();
+  return res.status(204).json({
+    status: "error",
+    data: {
+      user: null,
+    },
+  });
 };
 
 exports.restrictTo = (...roles) => {

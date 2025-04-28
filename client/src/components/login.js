@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import authService from "../services/authService";
+import { useAuth } from "../contexts/AuthContext";
 import { showAlert } from "../utils/alerts";
 
-const Login = ({ user, setUser }) => {
+const Login = () => {
   const nagivate = useNavigate();
+  const { setUser } = useAuth();
 
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");

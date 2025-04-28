@@ -1,9 +1,11 @@
 import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import authService from "../services/authService";
+import { useAuth } from "../contexts/AuthContext";
 import { showAlert } from "../utils/alerts";
 
-const Account = ({ user, setUser }) => {
+const Account = () => {
+  const { user, setUser } = useAuth();
   let [passwordCurrent, setPasswordCurrent] = useState("");
   let [password, setPassword] = useState("");
   let [passwordConfirm, setPasswordConfirm] = useState("");

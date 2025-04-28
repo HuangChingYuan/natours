@@ -2,6 +2,16 @@ import axios from "axios";
 const API_URL = "http://localhost:8080/api/v1/users";
 
 class AuthService {
+  isLoggedIn() {
+    return axios({
+      method: "GET",
+      url: API_URL + "/isLoggedIn",
+      withCredentials: true,
+    }).then((response) => {
+      return response;
+    });
+  }
+
   login(email, password) {
     return axios({
       method: "POST",
