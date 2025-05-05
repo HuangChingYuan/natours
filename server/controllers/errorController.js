@@ -9,21 +9,20 @@ const handleDuplicateFieldsDB = (err) => {
   const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
   console.log(value);
 
-  const message = `重複的欄位值 ${value} 請使用其他值`;
+  const message = `${value}重複,請重新輸入`;
   return new AppError(message, 400);
 };
 
 const handleValidationErrorDB = (err) => {
   const errors = Object.values(err.errors).map((el) => el.message);
 
-  const message = `輸入資料無效 ${errors.join(". ")}`;
+  const message = `${errors.join(". ")}`;
   return new AppError(message, 400);
 };
 
-const handleJWTError = () => new AppError("令牌無效 請重新登入", 401);
+const handleJWTError = () => new AppError("令牌無效,請重新登入", 401);
 
-const handleJWTExpiredError = () =>
-  new AppError("您的令牌已過期 請重新登入", 401);
+const handleJWTExpiredError = () => new AppError("令牌過期,請重新登入", 401);
 
 const sendErrorDev = (err, req, res) => {
   // A) 後端
@@ -60,7 +59,7 @@ const sendErrorProd = (err, req, res) => {
     // 2) 發送通用訊息
     return res.status(500).json({
       status: "error",
-      message: "未知錯誤",
+      message: "未知錯誤,請稍後再試",
     });
   }
 
@@ -95,6 +94,10 @@ module.exports = (err, req, res, next) => {
   if (error.name === "CastError") error = handleCastErrorDB(error);
   if (error.code === 11000) error = handleDuplicateFieldsDB(error);
   if (error.name === "ValidationError") error = handleValidationErrorDB(error);
+  if (error._message === "Validation failed")
+    error = handleValidationErrorDB(error);
+  if (error._message === "User validation failed")
+    error = handleValidationErrorDB(error);
   if (error.name === "JsonWebTokenError") error = handleJWTError();
   if (error.name === "TokenExpiredError") error = handleJWTExpiredError();
 

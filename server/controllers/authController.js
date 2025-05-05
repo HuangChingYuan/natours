@@ -81,7 +81,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
 
   if (!token) {
-    return next(new AppError("尚未登入", 401));
+    return next(new AppError("尚未登入任何帳號", 401));
   }
 
   // 2) 驗證令牌
@@ -90,12 +90,12 @@ exports.protect = catchAsync(async (req, res, next) => {
   // 3) 檢查用戶是否仍然存在
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) {
-    return next(new AppError("使用者不存在", 401));
+    return next(new AppError("帳號不存在", 401));
   }
 
   // 4) 檢查使用者在發出令牌後是否更改了密碼
   if (currentUser.changedPasswordAfter(decoded.iat)) {
-    return next(new AppError("請重新登入", 401));
+    return next(new AppError("密碼已更新,請重新登入", 401));
   }
 
   // 允許進入受保護路線
@@ -121,16 +121,18 @@ exports.isLoggedIn = async (req, res, next) => {
           status: "error",
           data: {
             user: null,
+            message: "帳號不存在",
           },
         });
       }
 
       // 3) 檢查使用者在發出令牌後是否有更改密碼
       if (currentUser.changedPasswordAfter(decoded.iat)) {
-        return res.status(200).json({
-          status: "success",
+        return res.status(401).json({
+          status: "error",
           data: {
-            user: currentUser,
+            user: null,
+            message: "密碼已更新,請重新登入",
           },
         });
       }
@@ -147,10 +149,11 @@ exports.isLoggedIn = async (req, res, next) => {
       return next(err);
     }
   }
-  return res.status(204).json({
+  return res.status(200).json({
     status: "error",
     data: {
       user: null,
+      message: "尚未登入任何帳號",
     },
   });
 };
@@ -159,7 +162,7 @@ exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     // roles ['admin', 'lead-guide']. role='user'
     if (!roles.includes(req.user.role)) {
-      return next(new AppError("您無權執行此操作", 403));
+      return next(new AppError("帳號權限不足", 403));
     }
 
     next();

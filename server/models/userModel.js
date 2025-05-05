@@ -26,19 +26,19 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, "請提供密碼"],
+    required: [true, "請提供更新的密碼"],
     minlength: 8,
     select: false,
   },
   passwordConfirm: {
     type: String,
-    required: [true, "請確認您的密碼"],
+    required: [true, "請再輸入一次密碼"],
     validate: {
       // 這只適用於 CREATE 和 SAVE!!!
       validator: function (el) {
         return el === this.password;
       },
-      message: "密碼不一樣",
+      message: "輸入的密碼不一致",
     },
   },
   passwordChangedAt: Date,

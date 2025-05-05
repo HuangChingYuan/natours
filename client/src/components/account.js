@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import authService from "../services/authService";
 import { useAuth } from "../contexts/AuthContext";
@@ -11,6 +11,10 @@ const Account = () => {
   let [passwordConfirm, setPasswordConfirm] = useState("");
   const inputName = useRef();
   const inputEmail = useRef();
+
+  useEffect(() => {
+    document.title = `Natours | ${user.name.split(" ")[0]}`;
+  }, [user.name]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

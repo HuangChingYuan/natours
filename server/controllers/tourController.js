@@ -14,7 +14,7 @@ exports.getTourByslug = catchAsync(async (req, res, next) => {
   });
 
   if (!tour) {
-    return next(new AppError("沒有同名的旅遊行程", 404));
+    return next(new AppError("找不到指定的旅遊行程", 404));
   }
 
   res.status(200).json({

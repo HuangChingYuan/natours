@@ -1,19 +1,22 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import tourService from "../services/tourService";
+import ErrorPage from "./error";
 
 const Tour = () => {
   const { slug } = useParams();
   const [tour, setTour] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     tourService
       .getTour(slug)
       .then((data) => {
         setTour(data.data);
+        document.title = `${data.data.name}`;
       })
       .catch((error) => {
-        console.error("獲取旅遊行程時出錯:", error);
+        setError(error);
       });
   }, [slug]);
 
@@ -65,6 +68,10 @@ const Tour = () => {
       </div>
     );
   };
+
+  if (error) {
+    return <ErrorPage error={error} />;
+  }
 
   if (!tour) {
     return (

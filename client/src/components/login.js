@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import authService from "../services/authService";
 import { useAuth } from "../contexts/AuthContext";
 import { showAlert } from "../utils/alerts";
 
 const Login = () => {
+  useEffect(() => {
+    document.title = "Natours | LOGIN";
+  }, []);
   const nagivate = useNavigate();
   const { setUser } = useAuth();
 
