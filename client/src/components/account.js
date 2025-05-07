@@ -11,10 +11,27 @@ const Account = () => {
   let [passwordConfirm, setPasswordConfirm] = useState("");
   const inputName = useRef();
   const inputEmail = useRef();
+  const inputPhoto = useRef();
+
+  if (!user) {
+    return (
+      <main className="main">
+        <div className="error">
+          <div className="error__title">
+            <h2 className="heading-secondary heading-secondary--error">
+              錯誤頁面
+            </h2>
+            <h2 className="error__emoji">😢 🤯</h2>
+          </div>
+          <div className="error__msg">尚未登入任何帳號</div>
+        </div>
+      </main>
+    );
+  }
 
   useEffect(() => {
-    document.title = `Natours | ${user.name.split(" ")[0]}`;
-  }, [user.name]);
+    document.title = `Natours | ${user?.name.split(" ")[0]}`;
+  }, [user?.name]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -33,11 +50,13 @@ const Account = () => {
   const handleUpdateSettings = async () => {
     const userName = inputName.current.value;
     const userEmail = inputEmail.current.value;
+    const userPhoto = inputPhoto.current.files[0];
     try {
       const updatedUser = {
         ...user,
         name: userName,
         email: userEmail,
+        photo: userPhoto,
       };
       let response = await authService.updateSettings(updatedUser);
       if (response.data.status === "success") {
@@ -140,6 +159,7 @@ const Account = () => {
                 alt="user img"
               />
               <input
+              ref={inputPhoto}
                 className="form__upload"
                 type="file"
                 accept="image/*"
