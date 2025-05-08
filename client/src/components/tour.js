@@ -48,7 +48,7 @@ const Tour = () => {
       <div className="reviews__card" key={review._id}>
         <div className="reviews__avatar">
           <img
-            src={`/img/users/${review.user.photo}`}
+            src={`http://localhost:8080/img/users/${review.user.photo}`}
             alt={review.user.name}
             className="reviews__avatar-img"
           />
