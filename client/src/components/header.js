@@ -51,7 +51,7 @@ const Header = () => {
             </button>
             <Link to="/me" className="nav__el">
               <img
-                src={`/img/users/${user.photo}`}
+                src={`http://localhost:8080/img/users/${user.photo}`}
                 alt={user.name}
                 className="nav__user-img"
               />

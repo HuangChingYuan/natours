@@ -13,6 +13,12 @@ const Account = () => {
   const inputEmail = useRef();
   const inputPhoto = useRef();
 
+  useEffect(() => {
+    if (user) {
+      document.title = `Natours | ${user?.name.split(" ")[0]}`;
+    }
+  }, [user]);
+
   if (!user) {
     return (
       <main className="main">
@@ -28,10 +34,6 @@ const Account = () => {
       </main>
     );
   }
-
-  useEffect(() => {
-    document.title = `Natours | ${user?.name.split(" ")[0]}`;
-  }, [user?.name]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -52,13 +54,11 @@ const Account = () => {
     const userEmail = inputEmail.current.value;
     const userPhoto = inputPhoto.current.files[0];
     try {
-      const updatedUser = {
-        ...user,
-        name: userName,
-        email: userEmail,
-        photo: userPhoto,
-      };
-      let response = await authService.updateSettings(updatedUser);
+      const form = new FormData();
+      form.append("name", userName);
+      form.append("email", userEmail);
+      if (userPhoto) form.append("photo", userPhoto);
+      let response = await authService.updateSettings(form);
       if (response.data.status === "success") {
         setUser(response.data.data.user);
         showAlert("success", "資料更新成功");
@@ -155,11 +155,11 @@ const Account = () => {
             <div className="form__group form__photo-upload">
               <img
                 className="form__user-photo"
-                src={`/img/users/${user.photo}`}
+                src={`http://localhost:8080/img/users/${user.photo}`}
                 alt="user img"
               />
               <input
-              ref={inputPhoto}
+                ref={inputPhoto}
                 className="form__upload"
                 type="file"
                 accept="image/*"

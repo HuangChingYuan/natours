@@ -2,25 +2,25 @@ const User = require("./../models/userModel");
 const catchAsync = require("./../utils/catchAsync");
 const AppError = require("./../utils/appError");
 const factory = require("./handlerFactory");
-const multer = require('multer');
-const sharp = require('sharp');
+const multer = require("multer");
+const sharp = require("sharp");
 
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('image')) {
+  if (file.mimetype.startsWith("image")) {
     cb(null, true);
   } else {
-    cb(new AppError('Not an image! Please upload only images.', 400), false);
+    cb(new AppError("僅供上傳圖檔", 400), false);
   }
 };
 
 const upload = multer({
   storage: multerStorage,
-  fileFilter: multerFilter
+  fileFilter: multerFilter,
 });
 
-exports.uploadUserPhoto = upload.single('photo');
+exports.uploadUserPhoto = upload.single("photo");
 
 exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
@@ -29,7 +29,7 @@ exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
 
   await sharp(req.file.buffer)
     .resize(500, 500)
-    .toFormat('jpeg')
+    .toFormat("jpeg")
     .jpeg({ quality: 90 })
     .toFile(`public/img/users/${req.file.filename}`);
 
@@ -58,7 +58,6 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   // 2) 篩選掉不允許更新和不需要的欄位
   const filteredBody = filterObj(req.body, "name", "email");
   // 如果有上傳圖片，則更新圖片路徑
-  // 這裡的 req.file 是 multer 處理後的圖片檔案
   if (req.file) filteredBody.photo = req.file.filename;
 
   // 3) 取得目前的使用者資料
@@ -73,8 +72,9 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     }
   }
 
-  if (isSame) {
-    return next(new AppError("請提供需要更新的姓名或Email", 400));
+  // 如果沒有更新任何資料，則回傳錯誤
+  if (isSame && !filteredBody.photo) {
+    return next(new AppError("請提供需要更新的資料或圖片", 400));
   }
 
   // 5) 更改個人資料

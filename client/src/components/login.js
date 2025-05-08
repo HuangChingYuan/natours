@@ -6,7 +6,7 @@ import { showAlert } from "../utils/alerts";
 
 const Login = () => {
   useEffect(() => {
-    document.title = "Natours | LOGIN";
+    document.title = "Natours | LOG IN";
   }, []);
   const nagivate = useNavigate();
   const { setUser } = useAuth();
@@ -74,7 +74,7 @@ const Login = () => {
           </div>
           <div className="form__group">
             <button onClick={handleLogin} className="btn btn--green">
-              Login
+              Log in
             </button>
           </div>
         </form>

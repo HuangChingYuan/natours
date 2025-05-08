@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import tourService from "../services/tourService";
 import ErrorPage from "./error";
+import { useAuth } from "../contexts/AuthContext";
 
 const Tour = () => {
   const { slug } = useParams();
   const [tour, setTour] = useState(null);
   const [error, setError] = useState(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     tourService
@@ -217,7 +219,7 @@ const Tour = () => {
               yours today!
             </p>
             <button className="btn btn--green span-all-rows">
-              Book tour now!
+              {user ? "Book tour now!" : "Log in to book tour"}
             </button>
           </div>
         </div>
