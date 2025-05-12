@@ -20,6 +20,11 @@ const authSlice = createSlice({
       state.user = action.payload;
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(checkLoginStatus.fulfilled, (state, action) => {
+      state.user = action.payload;
+    });
+  },
 });
 
 export const { setUser } = authSlice.actions;
