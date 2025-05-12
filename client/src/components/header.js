@@ -1,11 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
 import authService from "../services/authService";
-import { useAuth } from "../contexts/AuthContext";
+// import { useAuth } from "../contexts/AuthContext";
+import { useDispatch } from "react-redux";
+import { setUser } from "../store/authSlice";
+import { useSelector } from "react-redux";
 import { showAlert } from "../utils/alerts";
 
 const Header = () => {
   const nagivate = useNavigate();
-  const { user, setUser } = useAuth();
+  // const { user, setUser } = useAuth();
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
 
   const handleLogout = async () => {
     try {
@@ -13,10 +18,10 @@ const Header = () => {
       let response = await authService.logout();
       if (response.data.status === "success") {
         showAlert("success", "登出成功");
-        setUser(response.data.data.user);
+        dispatch(setUser(response.data.data.user));
+        // setUser(response.data.data.user);
       }
     } catch (err) {
-      console.log(err);
       showAlert("error", err);
     }
   };

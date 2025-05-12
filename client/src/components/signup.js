@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import authService from "../services/authService";
-import { useAuth } from "../contexts/AuthContext";
+// import { useAuth } from "../contexts/AuthContext";
+import { useDispatch } from "react-redux";
+import { setUser } from "../store/authSlice";
 import { showAlert } from "../utils/alerts";
 
 const Signup = () => {
@@ -9,7 +11,8 @@ const Signup = () => {
     document.title = "Natours | SIGN UP";
   }, []);
   const nagivate = useNavigate();
-  const { setUser } = useAuth();
+  // const { setUser } = useAuth();
+  const dispatch = useDispatch();
 
   let [name, setName] = useState("");
   let [email, setEmail] = useState("");
@@ -43,7 +46,8 @@ const Signup = () => {
         passwordConfirm
       );
       if (response.data.status === "success") {
-        setUser(response.data.data.user);
+        dispatch(setUser(response.data.data.user));
+        // setUser(response.data.data.user);
         showAlert("success", "註冊成功");
         window.setTimeout(() => {
           nagivate("/");

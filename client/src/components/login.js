@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import authService from "../services/authService";
-import { useAuth } from "../contexts/AuthContext";
+// import { useAuth } from "../contexts/AuthContext";
+import { useDispatch } from "react-redux";
+import { setUser } from "../store/authSlice";
 import { showAlert } from "../utils/alerts";
 
 const Login = () => {
@@ -9,7 +11,8 @@ const Login = () => {
     document.title = "Natours | LOG IN";
   }, []);
   const nagivate = useNavigate();
-  const { setUser } = useAuth();
+  // const { setUser } = useAuth();
+  const dispatch = useDispatch();
 
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
@@ -29,7 +32,8 @@ const Login = () => {
     try {
       let response = await authService.login(email, password);
       if (response.data.status === "success") {
-        setUser(response.data.data.user);
+        dispatch(setUser(response.data.data.user));
+        // setUser(response.data.data.user);
         showAlert("success", "登入成功");
         window.setTimeout(() => {
           nagivate("/");

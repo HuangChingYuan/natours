@@ -2,13 +2,15 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import tourService from "../services/tourService";
 import ErrorPage from "./error";
-import { useAuth } from "../contexts/AuthContext";
+// import { useAuth } from "../contexts/AuthContext";
+import { useSelector } from "react-redux";
 
 const Tour = () => {
   const { slug } = useParams();
   const [tour, setTour] = useState(null);
   const [error, setError] = useState(null);
-  const { user } = useAuth();
+  // const { user } = useAuth();
+  const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     tourService

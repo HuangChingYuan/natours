@@ -1,11 +1,15 @@
 import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import authService from "../services/authService";
-import { useAuth } from "../contexts/AuthContext";
+// import { useAuth } from "../contexts/AuthContext";
+import { setUser } from "../store/authSlice";
+import { useSelector, useDispatch } from "react-redux";
 import { showAlert } from "../utils/alerts";
 
 const Account = () => {
-  const { user, setUser } = useAuth();
+  // const { user, setUser } = useAuth();
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
   let [passwordCurrent, setPasswordCurrent] = useState("");
   let [password, setPassword] = useState("");
   let [passwordConfirm, setPasswordConfirm] = useState("");
@@ -60,7 +64,8 @@ const Account = () => {
       if (userPhoto) form.append("photo", userPhoto);
       let response = await authService.updateSettings(form);
       if (response.data.status === "success") {
-        setUser(response.data.data.user);
+        dispatch(setUser(response.data.data.user));
+        // setUser(response.data.data.user);
         showAlert("success", "資料更新成功");
       }
     } catch (err) {
@@ -78,7 +83,8 @@ const Account = () => {
       };
       let response = await authService.updateMyPassword(updatedMyPassword);
       if (response.data.status === "success") {
-        setUser(response.data.data.user);
+        dispatch(setUser(response.data.data.user));
+        // setUser(response.data.data.user);
         showAlert("success", "密碼更新成功");
       }
     } catch (err) {
