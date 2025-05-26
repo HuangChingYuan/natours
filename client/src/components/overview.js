@@ -1,27 +1,28 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+// import { useState, useEffect } from "react";
+import { Link, useLoaderData } from "react-router-dom";
 import tourService from "../services/tourService";
-import ErrorPage from "./error";
 
 const Overview = () => {
-  const [tours, setTours] = useState([]);
-  const [error, setError] = useState(null);
+  const resData = useLoaderData();
+  const tours = resData.data;
+  // const [tours, setTours] = useState([]);
+  // const [error, setError] = useState(null);
 
-  useEffect(() => {
-    tourService
-      .getAllTours()
-      .then((data) => {
-        setTours(data.data);
-        document.title = "Natours | All Tours";
-      })
-      .catch((error) => {
-        setError(error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   tourService
+  //     .getAllTours()
+  //     .then((data) => {
+  //       setTours(data.data);
+  //       document.title = "Natours | All Tours";
+  //     })
+  //     .catch((error) => {
+  //       setError(error);
+  //     });
+  // }, []);
 
-  if (error) {
-    return <ErrorPage error={error} />;
-  }
+  // if (error) {
+  //   return <ErrorPage error={error} />;
+  // }
 
   return (
     <main className="main">
@@ -117,3 +118,8 @@ const Overview = () => {
 };
 
 export default Overview;
+
+export async function loader() {
+  const response = await tourService.getAllTours();
+  return response;
+}

@@ -1,28 +1,44 @@
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import tourService from "../services/tourService";
 import ErrorPage from "./error";
 // import { useAuth } from "../contexts/AuthContext";
 import { useSelector } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
+
+const fetchTour = (slug) => tourService.getTour(slug).then((data) => data.data);
 
 const Tour = () => {
   const { slug } = useParams();
-  const [tour, setTour] = useState(null);
-  const [error, setError] = useState(null);
+  // const [tour, setTour] = useState(null);
+  // const [error, setError] = useState(null);
   // const { user } = useAuth();
   const user = useSelector((state) => state.auth.user);
 
-  useEffect(() => {
-    tourService
-      .getTour(slug)
-      .then((data) => {
-        setTour(data.data);
-        document.title = `${data.data.name}`;
-      })
-      .catch((error) => {
-        setError(error);
-      });
-  }, [slug]);
+  const {
+    data: tour,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["tour", slug],
+    queryFn: () => fetchTour(slug),
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error: {error.message}</div>;
+
+  // useEffect(() => {
+  //   tourService
+  //     .getTour(slug)
+  //     .then((data) => {
+  //       setTour(data.data);
+  //       document.title = `${data.data.name}`;
+  //     })
+  //     .catch((error) => {
+  //       setError(error);
+  //     });
+  // }, [slug]);
 
   const date =
     tour &&
@@ -140,7 +156,7 @@ const Tour = () => {
                 return (
                   <div className="overview-box__detail" key={guide._id}>
                     <img
-                      src={`/img/users/${guide.photo}`}
+                      src={`http://localhost:8080/img/users/${guide.photo}`}
                       alt={guide.name}
                       className="overview-box__img"
                     />
